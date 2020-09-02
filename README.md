@@ -68,3 +68,9 @@ Error: error building at STEP "RUN apt-get -q -y update": error while running ru
 ```
 
 More at https://github.com/opencontainers/runc/issues/2163.
+
+
+
+# Thanks
+
+This project is a grateful recipient of the [Aiven](https://aiven.io?utm_source=github&utm_medium=plankton-program&utm_campaign=planter-docker) Open Source sponsorship program.
