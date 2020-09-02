@@ -49,7 +49,7 @@ The Docker file exposes these commands:
 
 * `planter <args>` Which would be same as running `planter <args` *(surprise)*. Arguments are directly passed to planter.
 * `plantuml <args>` Which would be same as running `java -jar plantuml.jar <args>`.
-* `er <postgres-url> [postgres-schema] [tables-name-matcher]` Which is a convenience command for combining commands and directly getting the image.
+* `er <postgres-url> [postgres-schema] [tables-name-matcher] [output-file-name]` Which is a convenience command for combining commands and directly getting the image.
 
 
 ## Update to latest version
@@ -64,6 +64,9 @@ docker pull kimmobrunfeldt/planter:latest
 ```
 podman build --cgroup-manager=cgroupfs .
 ```
+
+Then use the `podman run` command but replace `kimmobrunfeldt/planter` with the
+image id returned by build.
 
 Without the extra flag, building fails to:
 

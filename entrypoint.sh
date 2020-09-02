@@ -39,6 +39,8 @@ elif [[ "$command" == "er" ]]; then
   postgres_url="$1"
   postgres_schema_name=${2:-public}
   table_name_matcher="$3"
+  default_file_name="er-$(date '+%Y-%m-%dT%H_%M_%S')"
+  output_file_name=${4:-$default_file_name}
 
   if [[ -z "$postgres_url" ]]; then
     echo "Postgres connection url argument missing"
@@ -61,10 +63,9 @@ elif [[ "$command" == "er" ]]; then
     table_args=$(echo $output | xargs -n 1 | sed -e 's/^/-t /' | xargs)
   fi
 
-  file_name="er-$(date '+%Y-%m-%dT%H_%M_%S')"
   set -x
-  planter $postgres_url -s $postgres_schema_name $table_args -o "$file_name.uml"
-  java $JAVA_ARGS -jar $PLANTUML_PATH -verbose "$file_name.uml"
+  planter $postgres_url -s $postgres_schema_name $table_args -o "$output_file_name.uml"
+  java $JAVA_ARGS -jar $PLANTUML_PATH -verbose "$output_file_name.uml"
   set +x
 else
   print_usage
