@@ -5,7 +5,13 @@ This Dockerfile packages [planter](https://github.com/achiku/planter) and [plant
 Create an ER diagram out of Postgres database from `public` schema, from tables matching `table_name LIKE '%user%'`:
 
 ```
-docker run -v $PWD:/root -w /root --rm -it kimmobrunfeldt/planter er postgres://planter@localhost/planter?sslmode=disable public "%user%"
+docker run -v $PWD:/root -w /root --rm -it kimmobrunfeldt/planter er postgres://planter@localhost/planter?sslmode=disable public "LIKE '%user%'"
+```
+
+or with [POSIX regex](https://www.postgresql.org/docs/9.3/functions-matching.html) that matches tables containing `user` or `profile`:
+
+```
+docker run -v $PWD:/root -w /root --rm -it kimmobrunfeldt/planter er postgres://planter@localhost/planter?sslmode=disable public "~ '(user|profile)'"
 ```
 
 or create an ER diagram of all tables with the original CLI tools:
@@ -34,7 +40,7 @@ The Docker file exposes these commands:
 
 * `planter <args>` Which would be same as running `planter <args` *(surprise)*. Arguments are directly passed to planter.
 * `plantuml <args>` Which would be same as running `java -jar plantuml.jar <args>`.
-* `er <postgres-url> [postgres-schema] [tables-name-pattern]` Which is a convenience command for combining commands and directly getting the image.
+* `er <postgres-url> [postgres-schema] [tables-name-matcher]` Which is a convenience command for combining commands and directly getting the image.
 
 
 ## Update to latest version

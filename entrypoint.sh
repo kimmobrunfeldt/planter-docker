@@ -38,7 +38,7 @@ elif [[ "$command" == "plantuml" ]]; then
 elif [[ "$command" == "er" ]]; then
   postgres_url="$1"
   postgres_schema_name=${2:-public}
-  table_name_like="$3"
+  table_name_matcher="$3"
 
   if [[ -z "$postgres_url" ]]; then
     echo "Postgres connection url argument missing"
@@ -46,10 +46,11 @@ elif [[ "$command" == "er" ]]; then
   fi
 
   table_args=""
-  if [[ -n "$table_name_like" ]]; then
-    output=$(psql "$postgres_url" -t -A -c "SELECT table_name FROM information_schema.tables WHERE table_schema = '$postgres_schema_name' AND table_name LIKE '$table_name_like'")
+  if [[ -n "$table_name_matcher" ]]; then
+    # WARNING: Don't expose this to unsafe input, direct SQL string concat is used
+    output=$(psql "$postgres_url" -t -A -c "SELECT table_name FROM information_schema.tables WHERE table_schema = '$postgres_schema_name' AND table_name $table_name_matcher")
     if [[ -z "$output" ]]; then
-      echo "No tables found matching pattern \"table_name LIKE '$table_name_like'\""
+      echo "No tables found matching pattern \"WHERE table_name $table_name_matcher\""
       exit 2
     fi
 
