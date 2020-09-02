@@ -22,7 +22,7 @@ RUN apt-get -q -y install build-essential git gcc nano
 RUN apt-get install -q -y golang-go gom
 ENV GOPATH="/app/go"
 ENV PATH="${PATH}:${GOPATH}"
-RUN apt-get install -q- y graphviz openjdk-8-jre
+RUN apt-get install -q -y graphviz openjdk-8-jre
 RUN go get -u github.com/achiku/planter
 
 # CWD of host will be mounted to root, so set it as working directory
