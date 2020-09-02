@@ -2,26 +2,34 @@
 
 This Dockerfile packages [planter](https://github.com/achiku/planter) and [plantuml](https://github.com/plantuml/plantuml) into a Docker image. They are both needed to get Postgres ER diagrams as images.
 
-Create an ER diagram out of Postgres database from `public` schema, from tables matching `table_name LIKE '%user%'`:
 
-```
-docker run -v $PWD:/root -w /root --rm -it kimmobrunfeldt/planter er postgres://planter@localhost/planter?sslmode=disable public "LIKE '%user%'"
+Create an ER diagram out of the whole Postgres database from the default `public` schema tables:
+
+```bash
+alias plant='docker run -v $PWD:/root -w /root --rm -it kimmobrunfeldt/planter'
+plant er postgres://planter@localhost/planter?sslmode=disable
 ```
 
-or with [POSIX regex](https://www.postgresql.org/docs/9.3/functions-matching.html) that matches tables containing `user` or `profile`:
+or from `data` schema, from tables matching `table_name LIKE '%user%'`:
 
+```bash
+plant er postgres://planter@localhost/planter?sslmode=disable data "LIKE '%user%'"
 ```
-docker run -v $PWD:/root -w /root --rm -it kimmobrunfeldt/planter er postgres://planter@localhost/planter?sslmode=disable public "~ '(user|profile)'"
+
+or using [POSIX regex](https://www.postgresql.org/docs/9.3/functions-matching.html) that matches tables containing `user` or `profile`:
+
+```bash
+plant er postgres://planter@localhost/planter?sslmode=disable public "~ '(user|profile)'"
 ```
 
 or create an ER diagram of all tables with the original CLI tools:
 
-```
-docker run -v $PWD:/root -w /root --rm -it kimmobrunfeldt/planter planter postgres://planter@localhost/planter?sslmode=disable -o example.uml
-docker run -v $PWD:/root -w /root --rm -it kimmobrunfeldt/planter plantuml -verbose example.uml
+```bash
+plant planter postgres://planter@localhost/planter?sslmode=disable -o example.uml
+plant plantuml -verbose example.uml
 ```
 
-In Fedora, if you're using podman, you need to add option `--security-opt label=disable` to disable SELinux security isolation which prevents volume mounting. See https://github.com/containers/libpod/issues/3683 for more.
+In Fedora, if you're using podman, you need to add option `--security-opt label=disable` for the run command to disable SELinux security isolation which prevents volume mounting. See https://github.com/containers/libpod/issues/3683 for more.
 
 
 ## Common pitfalls
