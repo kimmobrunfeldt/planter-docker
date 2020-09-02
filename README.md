@@ -7,6 +7,7 @@ Create an ER diagram out of the whole Postgres database from the default `public
 
 ```bash
 alias plant='docker run -v $PWD:/root -w /root --rm -it kimmobrunfeldt/planter'
+# or replace `docker` with `podman`
 plant er postgres://planter@localhost/planter?sslmode=disable
 ```
 
